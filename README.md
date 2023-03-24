@@ -1,9 +1,9 @@
-### //// ApliNi 的博客 ////
+**//// ApliNi 的博客 ////**
 
 
-> 文章: [**[所有文章]**](https://github.com/ApliNi/blog/issues).  
-> 收藏: 点击右上方 `star` 按钮.  
-> 订阅: 点击右上方 `watch` 按钮, 选择 `All Activity`.  
+> **文章**: [**[所有文章]**](https://github.com/ApliNi/blog/issues).  
+> **收藏**: 点击右上方 `star` 按钮.  
+> **订阅**: 点击右上方 `watch` 按钮, 选择 `All Activity`.  
 
 
 > **转载**  
