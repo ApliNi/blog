@@ -6,13 +6,6 @@
 > **订阅**: 点击右上角 `watch` 按钮, 选择 `All Activity`.  
 
 
-> **友链**  
-> [`IpacEL` 服务器的运行离不开每位玩家的参与, 欢迎加入Ipacamod服务器 !](https://ipacel.cc/)  
-
-
-![](https://ipacel.top/api/v3/file/get/8012/me.jpg?sign=G2Z39rH7Gd5DZMUeyQP80tyKBjLsdw1pKey06iu2gj4%3D%3A0)
-
-
 > **转载**  
 > 除注明外, 所有文章均采用 [Creative Commons BY-NC-ND 4.0\(自由转载-保持署名-非商用-禁止演绎\)](http://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh) 协议发布.  
 > 受保护的对象也包括 https://github.com/ApliNi/blog/issues 页面及其子页面中的所有内容.  
