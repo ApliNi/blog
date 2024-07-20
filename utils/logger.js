@@ -22,36 +22,33 @@ export const logger = {
 
 	_objectParse: (list, hierarchy = 1) => list.map(obj => {
 
-		try{
+		// 这里使用了不标准的方法判断类型, 为了速度, 如果需要打印特殊的类型则需要修改
 		
-			if(obj.trim){	// 这是字符串
-				return obj;
-			}
-
-			if(obj.length){	// 这是数组
-				const strArr = obj.map(item => logger._objectParse([item], hierarchy + 1)[0]);
-				const length = strArr.map(li => li.length).reduce((a, b) => a + b, 0);
-
-				if(length <= 80){
-					return `[ ${strArr.join(', ')} ]`;
-				}
-
-				const indent = ' '.repeat(2 * hierarchy);
-				return `[\n${strArr.map(str => str.replace(/^([^\s])/gm, `${indent}$1`)).join(',\n')}\n]`;
-			}
-
-			if(obj.constructor === Object){
-				const str = JSON.stringify(obj, null, 2 * hierarchy);
-				if(str.length <= 80){
-					return str.replace(/\s*\n\s*/g, ' ');
-				}
-				return str;
-			}
-			
+		if(obj.trim){	// 这是字符串
 			return obj;
-		}catch(err){
-			console.error(err);
 		}
+
+		if(obj.length){	// 这是数组
+			const strArr = obj.map(item => logger._objectParse([item], hierarchy + 1)[0]);
+			const length = strArr.map(li => li.length).reduce((a, b) => a + b, 0);
+
+			if(length <= 80){
+				return `[ ${strArr.join(', ')} ]`;
+			}
+
+			const indent = ' '.repeat(2 * hierarchy);
+			return `[\n${strArr.map(str => str.replace(/^([^\s])/gm, `${indent}$1`)).join(',\n')}\n]`;
+		}
+
+		if(obj.constructor === Object){
+			const str = JSON.stringify(obj, null, 2 * hierarchy);
+			if(str.length <= 80){
+				return str.replace(/\s*\n\s*/g, ' ');
+			}
+			return str;
+		}
+		
+		return obj;
 	}),
 
 	info(...log){
