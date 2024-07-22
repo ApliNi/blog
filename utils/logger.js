@@ -20,35 +20,40 @@ export const logger = {
 		return `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}:${time.getSeconds().toString().padStart(2, '0')}`;
 	},
 
-	_objectParse: (list, hierarchy = 1) => list.map(obj => {
+	_objectParse: (list, hierarchy = 1, isArray = false) => list.map(obj => {
 
-		// 这里使用了不标准的方法判断类型, 为了速度, 如果需要打印特殊的类型则需要修改
-		
-		if(obj.trim){	// 这是字符串
-			return obj;
-		}
+		switch(obj.constructor.name){
+			case 'String':
+				if(isArray){
+					return JSON.stringify(obj);
+				}
+				return obj;
 
-		if(obj.length){	// 这是数组
-			const strArr = obj.map(item => logger._objectParse([item], hierarchy + 1)[0]);
-			const length = strArr.map(li => li.length).reduce((a, b) => a + b, 0);
+			case 'Array':
+				const strArr = obj.map(item => logger._objectParse([item], hierarchy + 1, true)[0]);
+				const length = strArr.map(li => li.length).reduce((a, b) => a + b, 0);
+	
+				if(length <= 80){
+					return `[ ${strArr.join(', ')} ]`;
+				}
+	
+				const indent = ' '.repeat(2 * hierarchy);
+				return `[\n${strArr.map(str => str.replace(/^([^\s])/gm, `${indent}$1`)).join(',\n')}\n]`;
 
-			if(length <= 80){
-				return `[ ${strArr.join(', ')} ]`;
-			}
+			case 'Object':
+				const str = JSON.stringify(obj, null, 2 * hierarchy);
+				if(str.length <= 80){
+					return str.replace(/\s*\n\s*/g, ' ');
+				}
+				return str;
 
-			const indent = ' '.repeat(2 * hierarchy);
-			return `[\n${strArr.map(str => str.replace(/^([^\s])/gm, `${indent}$1`)).join(',\n')}\n]`;
-		}
+			case 'Error':
+				return `${obj.name}: ${obj.message}\n${obj.stack}`;
 
-		if(obj.constructor === Object){
-			const str = JSON.stringify(obj, null, 2 * hierarchy);
-			if(str.length <= 80){
-				return str.replace(/\s*\n\s*/g, ' ');
-			}
-			return str;
-		}
-		
-		return obj;
+			default:
+				// console.log(obj.constructor.name);
+				return obj.toString();
+		};
 	}),
 
 	info(...log){
