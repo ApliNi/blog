@@ -22,7 +22,16 @@ export const logger = {
 
 	_objectParse: (list, hierarchy = 1, isArray = false) => list.map(obj => {
 
-		switch(obj.constructor.name){
+		if(obj === null){
+			return 'null';
+		}else if(obj === undefined){
+			return 'undefined';
+		}
+
+		const constructorName = obj?.constructor?.name || '';
+
+		switch(constructorName){
+
 			case 'String':
 				if(isArray){
 					return JSON.stringify(obj);
@@ -47,12 +56,17 @@ export const logger = {
 				}
 				return str;
 
-			case 'Error':
-				return `${obj.name}: ${obj.message}\n${obj.stack}`;
-
 			default:
-				// console.log(obj.constructor.name);
-				return obj.toString();
+				// console.log(constructorName);
+				if(constructorName.includes('Error')){
+					return `${obj.name}: ${obj.message}\n${obj.stack}`;
+				}
+				else if(obj?.toString){
+					return obj.toString();
+				}
+				else{
+					return JSON.stringify(obj);
+				}
 		};
 	}),
 
