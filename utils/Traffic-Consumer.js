@@ -62,8 +62,20 @@ const on = async () => {
 		const adjust1 = 0 - (speed - averageSpeed) * 20;
 		const adjust2 = 0 - (speed - totalSpeed) * 40;
 		sleepTime = Math.max(0, sleepTime + adjust0 + adjust1 + adjust2);
+
+		let totalTrafficDisplay;
+		let temp = totalTraffic / 1024 / 1024;
+		if(temp < 1024){
+			totalTrafficDisplay = `${temp.toFixed(2)} MB`;
+		}else if(temp < 1_048_576){
+			totalTrafficDisplay = `${(temp / 1024).toFixed(2)} GB`;
+		}else if(temp < 1_073_741_824){
+			totalTrafficDisplay = `${(temp / 1024 / 1024).toFixed(2)} TB`;
+		}else{
+			totalTrafficDisplay = `${(temp / 1024 / 1024 / 1024).toFixed(2)} PB`;
+		}
 		
-		console.log(`[Download] ${(totalTraffic / 1024 / 1024).toFixed(2)} MB -- ${totalSpeed.toFixed(2)} / ${averageSpeed.toFixed(2)} / ${nowSpeed.toFixed(2)} MB/s -- Sleep ${Math.floor(sleepTime)}ms (Adjust ${adjust2.toFixed(2)}, ${adjust1.toFixed(2)}, ${adjust0.toFixed(2)})`);
+		console.log(`[Download] ${totalTrafficDisplay} -- ${totalSpeed.toFixed(2)} / ${averageSpeed.toFixed(2)} / ${nowSpeed.toFixed(2)} MB/s -- Sleep ${Math.floor(sleepTime)}ms (Adjust ${adjust2.toFixed(2)}, ${adjust1.toFixed(2)}, ${adjust0.toFixed(2)})`);
 	}, 150);
 
 	for(let i = 1; i <= Thread; i++){
