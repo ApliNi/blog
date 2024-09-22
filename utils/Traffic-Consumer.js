@@ -40,18 +40,13 @@ const on = async () => {
 };
 
 (async () => {
-
 	console.log(`Speed ${speed} MB/s -- Thread ${Thread}`);
+	await sleep(500);
 
 	let settledTraffic = 0;
 	let nowStatTime = performance.now();
 	const totalStatTime = nowStatTime;
 	let averageSpeedArr = [];
-
-	for(let i = 1; i <= Thread; i++){
-		await on();
-		await sleep(27);
-	}
 	
 	setInterval(() => {
 		const nowTime = performance.now();
@@ -70,4 +65,9 @@ const on = async () => {
 		
 		console.log(`[Download] ${(totalTraffic / 1024 / 1024).toFixed(2)} MB -- ${totalSpeed.toFixed(2)} / ${averageSpeed.toFixed(2)} / ${nowSpeed.toFixed(2)} MB/s -- Sleep ${Math.floor(sleepTime)}ms (Adjust ${adjust2.toFixed(2)}, ${adjust1.toFixed(2)}, ${adjust0.toFixed(2)})`);
 	}, 150);
+
+	for(let i = 1; i <= Thread; i++){
+		await on();
+		await sleep(27);
+	}
 })();
