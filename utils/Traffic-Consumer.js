@@ -13,21 +13,22 @@ let sleepTime = 100;
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-const on = async (name) => {
+const on = async () => {
 	try{
 		const res = await fetch(url);
 		const reader = res.body.getReader();
 		const read = async () => {
 			const { done, value } = await reader.read();
-			if(done) return on(name);
+			if(done) return;
 			totalTraffic += value.byteLength;
 			await sleep(sleepTime);
 			read();
 		}
 		read();
 	}catch(err){
-		console.error(`[Fetch] [${name}] ${err}`);
-		on(name);
+		console.error(`[Fetch]`, err);
+	}finally{
+		on();
 	}
 };
 
@@ -56,8 +57,7 @@ const on = async (name) => {
 	}, 100);
 
 	for(let i = 1; i <= Thread; i++){
-		const name = `${i}`.padStart(Thread.toString().length, '0');
-		on(name);
+		await on();
 		await sleep(270);
 	}
 
