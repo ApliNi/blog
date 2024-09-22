@@ -5,8 +5,8 @@
 const speed = Number(process.argv[2] || 1);	// (MB/s)
 const Thread = Math.ceil(speed / 2.5);
 // https://speed.cloudflare.com/__down?bytes=25000000
-// https://x19.gdl.netease.com/MCLauncher_1.12.0.25703.exe
-const url = `https://x19.gdl.netease.com/MCLauncher_1.12.0.25703.exe`;
+// https://issuepcdn.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_7.44.5.2.exe
+const url = `https://issuepcdn.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_7.44.5.2.exe`;
 
 let totalTraffic = 0;
 let sleepTime = 100;
@@ -36,7 +36,7 @@ const on = async (name) => {
 	let settledTraffic = 0;
 	let totalStatTime = 0;
 	let nowStatTime = performance.now();
-	let step = 8;
+	let step = 4;
 	let averageSpeedArr = [];
 	
 	setInterval(() => {
