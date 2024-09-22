@@ -12,7 +12,7 @@ const url = `https://qdcu04.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_7
 let totalTraffic = 0;
 let sleepTime = 100;
 
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms) => ms === 0 ? true : new Promise(resolve => setTimeout(resolve, ms));
 
 const on = async () => {
 	try{
