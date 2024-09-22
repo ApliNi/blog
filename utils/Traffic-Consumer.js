@@ -5,8 +5,8 @@
 const speed = Number(process.argv[2] || 1);	// (MB/s)
 const Thread = Math.ceil(speed / 2.5);
 // https://speed.cloudflare.com/__down?bytes=25000000
-// https://issuepcdn.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_7.44.5.2.exe
-const url = `https://issuepcdn.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_7.44.5.2.exe`;
+// https://qdcu04.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_7.44.5.2.exe
+const url = `https://qdcu04.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_7.44.5.2.exe`;
 
 let totalTraffic = 0;
 let sleepTime = 100;
