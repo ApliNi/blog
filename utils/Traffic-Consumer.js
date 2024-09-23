@@ -21,10 +21,7 @@ const on = async () => {
 		const read = async () => {
 			try{
 				const { done, value } = await reader.read();
-				if(done){
-					on();
-					return;
-				}
+				if(done) return;
 				totalTraffic += value.byteLength;
 				await sleep(sleepTime);
 				read();
@@ -35,6 +32,7 @@ const on = async () => {
 		read();
 	}catch(err){
 		console.error(`[Fetch]`, err);
+	}finally{
 		on();
 	}
 };
