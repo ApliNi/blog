@@ -77,7 +77,7 @@ const on = async () => {
 	}, 150);
 
 	for(let i = 1; i <= Thread; i++){
-		await on();
+		on();
 		await sleep(27);
 	}
 })();
