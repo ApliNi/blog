@@ -24,12 +24,12 @@ const on = async () => {
 				if(done) return;
 				totalTraffic += value.byteLength;
 				await sleep(sleepTime);
-				read();
+				await read();
 			}catch(err){
 				console.error(`[Reader]`, err);
 			}
 		}
-		read();
+		await read();
 	}catch(err){
 		console.error(`[Fetch]`, err);
 	}finally{
