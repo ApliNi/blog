@@ -1,3 +1,21 @@
+//可自定义时间范围和分辨率的时间戳. 用于优化大量短期存放数据的体积和索引
+
+// // miniTime 配置
+// let miniTimeConfig = {
+// 	reso: 10 * 60 * 1000, // 分辨率10分钟
+// 	rbr: 69 * 24 * 6, // 最大69天 // 这里的单位为上方的分辨率
+// 	// 0 ~ 9936
+// };
+
+// // 当前时间
+// let nowTime = miniTime.compile(miniTimeConfig);
+// // 数据过期时间 (数据保留32天)
+// let expirationTime = nowTime - 32 * 24 * 6;
+
+
+// // 转换回标准时间戳
+// let time = miniTIme.decompile(miniTimeConfig, nowTime);
+
 export let miniTime = {
 	_c: {
 		// 参数
