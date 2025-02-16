@@ -1,6 +1,26 @@
 // sArr 是前后没有括号的字符串格式的数组, 使用逗号分隔数据, 其数据和长度保存在一个普通数组里
 // Arr[字符串, 长度]
 
+// // 创建 sArrObj
+// let sArr = sArrLib.new(100);
+// // 输出: ['null,null,null,...共100位...null', 100]
+
+// // 添加一个数据
+// sArr = sArrLib.push(sArr, 100);
+// // 输出: ['null,null,null,...共101位...null,100', 101]
+
+// // 删除第一个数据
+// sArr = sArrLib.shift(sArr);
+// // 输出: ['null,null,...共100位...null,100', 100]
+
+// // 删除第一位并添加一个数据
+// sArr = sArrLib.moveLeft(sArr, 200);
+// // 输出: ['null,...共100位...null,100,200', 100]
+
+// // 转换为普通数组
+// arr = sArrLib.toArray(sArr);
+// // 输出: [null, ...共100位...null, 100, 200]
+
 export let sArrLib = {
 
 	// 往最后添加一个元素
