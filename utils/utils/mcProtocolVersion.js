@@ -1,3 +1,11 @@
+// 尽可能的通过 MC 服务器的 ping 信息获取版本号, 通过协议版本号/ 版本名称/ motd 匹配版本号或版本范围.
+
+// let pv = 762;
+// let vName = 'paper 1.19.4';
+// let motd = '我们支持 1.16.5 到 1.19.4 版本';
+
+// let verName = getVer(pv, vName, motd);
+// // verName: '1.16.5 - 1.19.4'
 
 // https://wiki.vg/Protocol_version_numbers
 export const MCProtocolVersion = {
