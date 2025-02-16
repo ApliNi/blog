@@ -1,7 +1,10 @@
-// Limit the number of times a program can be started per day.
-// Use `node Start-Limiter.js [daily limit]` to set the limiter.
-// Example (in loop):
-// - node main.js && node Start-Limiter.js 100
+
+// 限制程序每天启动的次数
+
+// 使用方法 (在 Shell 的循环中):
+// <其他程序>
+// node Start-Limiter.js [次数]
+//   - 次数: 限制程序每天可以启动的次数
 
 const fs = require('fs');
 
