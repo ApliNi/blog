@@ -1,0 +1,39 @@
+<script>
+	// 在应用实例页面添加扩展页面卡片, 上传本文件
+	(function() {
+
+		const mouseClick = (element, offsetX = 0, offsetY = 0) => {
+			const rect = element.getBoundingClientRect();
+			const clientX = rect.left + offsetX;
+			const clientY = rect.top + offsetY;
+			// 鼠标移动事件
+			element.dispatchEvent(new MouseEvent('mousemove',   { clientX, clientY, bubbles: true }));
+			// 鼠标按下事件
+			element.dispatchEvent(new MouseEvent('mousedown',   { clientX, clientY, bubbles: true, buttons: 1 }));
+			// 鼠标释放事件
+			element.dispatchEvent(new MouseEvent('mouseup',     { clientX, clientY, bubbles: true }));
+			// 点击事件
+			element.dispatchEvent(new MouseEvent('click',       { clientX, clientY, bubbles: true }));
+		};
+
+		const dom = {
+			菜单: 'li.ant-pagination-options > div > div.ant-select-selector > span.ant-select-selection-item',
+			选项100条: 'div.rc-virtual-list > div.rc-virtual-list-holder > div > div > div:nth-child(4) > div',
+		};
+
+		setInterval(() => {
+			if(!window.location.href.endsWith('/#/instances')) return;
+
+			const 菜单 = document.querySelector(dom.菜单);
+			if(!菜单 || 菜单.textContent.startsWith('100')) return;
+
+			const 选项 = document.querySelector(dom.选项100条);
+			if(选项){
+				mouseClick(选项);
+			}else{
+				mouseClick(菜单);
+				mouseClick(document.querySelector(dom.选项100条));
+			}
+		}, 300);
+	})();
+</script>
