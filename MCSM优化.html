@@ -4,16 +4,22 @@
 
 		// 优化滚动卡顿
 		if(true){
-			const header = document.querySelector('[id="app-mount-point"] .global-app-container .app-header-wrapper');
-			if(header){
-				header.style.height = '60px';
-				header.style.width = '100vw';
-				header.style.margin = '-30px -99999px';
-				header.style.position = 'sticky';
-
-			}
-			document.body.style.willChange = 'transform';
-			document.body.style.transform = 'translateZ(0)';
+			const style = document.createElement('style');
+			style.type = 'text/css';
+			style.rel = 'stylesheet';
+			style.appendChild(document.createTextNode(`
+				body {
+					will-change: transform;
+					transform: translateZ(0);
+				}
+				#app-mount-point .global-app-container .app-header-wrapper:has(> div.app-header-content) {
+					height: 60px;
+					width: 100vw;
+					margin: -30px -99999px;
+					position: sticky;
+				}
+			`));
+			document.querySelector('head').appendChild(style);
 		}
 
 		// 自动展开 100 条每页
