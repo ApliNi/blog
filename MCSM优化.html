@@ -5,7 +5,7 @@
 		const config = {
 			'优化滚动卡顿': true,
 			'恢复每行 4 个卡片': true,
-			'隐藏卡片到期时间': true,
+			'隐藏卡片部分文字': true,
 			'搜索框始终展开': true,
 			'自动展开 100 条每页': true,
 		};
@@ -52,18 +52,18 @@
 			document.querySelector('head').appendChild(style);
 		}
 
-		// 隐藏卡片到期时间
+		// 隐藏卡片到期时间, 启动时间等没有 class 的 div
 		// 缩小最小高度
-		if(config['隐藏卡片到期时间'] && !document.body.classList.contains('aplini_hide_expired_time')){
+		if(config['隐藏卡片部分文字'] && !document.body.classList.contains('aplini_hide_expired_time')){
 			document.body.classList.add('aplini_hide_expired_time');
 			const style = document.createElement('style');
 			style.type = 'text/css';
 			style.rel = 'stylesheet';
 			style.appendChild(document.createTextNode(`
 				[data-card-type="InstanceList"] .card-panel {
-					min-height: 154px !important;
+					min-height: 126px !important;
 
-					.ant-typography > div:nth-child(3) {
+					.ant-typography > div:not([class]) {
 						display: none;
 					}
 				}
