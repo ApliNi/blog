@@ -3,12 +3,13 @@
 	(function() {
 
 		// 优化滚动卡顿
-		if(true){
+		if(true && !document.body.classList.contains('aplini_optimize_scroll')){
+			document.body.classList.add('aplini_optimize_scroll');
 			const style = document.createElement('style');
 			style.type = 'text/css';
 			style.rel = 'stylesheet';
 			style.appendChild(document.createTextNode(`
-				body {
+				body:has(.ant-modal-root > .ant-modal-mask[style="display: none;"]) {
 					will-change: transform;
 					transform: translateZ(0);
 				}
@@ -23,7 +24,8 @@
 		}
 
 		// 自动展开 100 条每页
-		if(true){
+		if(true && !document.body.classList.contains('aplini_auto_expand')){
+			document.body.classList.add('aplini_auto_expand');
 			const mouseClick = (element, offsetX = 0, offsetY = 0) => {
 				const rect = element.getBoundingClientRect();
 				const clientX = rect.left + offsetX;
