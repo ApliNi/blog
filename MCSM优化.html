@@ -6,6 +6,7 @@
 			'优化滚动卡顿': true,
 			'恢复每行 4 个卡片': true,
 			'隐藏卡片到期时间': true,
+			'搜索框始终展开': true,
 			'自动展开 100 条每页': true,
 		};
 
@@ -42,7 +43,7 @@
 			style.rel = 'stylesheet';
 			style.appendChild(document.createTextNode(`
 				@media (min-width: 1200px) {
-					.container > .ant-row > .ant-col:has(> .card-panel) {
+					[data-card-type="InstanceList"] .container > .ant-row > .ant-col:has(> .card-panel) {
 						flex: 0 0 25%;
 						max-width: 25%;
 					}
@@ -59,12 +60,26 @@
 			style.type = 'text/css';
 			style.rel = 'stylesheet';
 			style.appendChild(document.createTextNode(`
-				.card-panel {
+				[data-card-type="InstanceList"] .card-panel {
 					min-height: 154px !important;
 
 					.ant-typography > div:nth-child(3) {
 						display: none;
 					}
+				}
+			`));
+			document.querySelector('head').appendChild(style);
+		}
+
+		// 搜索框始终展开
+		if(config['搜索框始终展开'] && !document.body.classList.contains('aplini_search_always_expand')){
+			document.body.classList.add('aplini_search_always_expand');
+			const style = document.createElement('style');
+			style.type = 'text/css';
+			style.rel = 'stylesheet';
+			style.appendChild(document.createTextNode(`
+				.search-input {
+					width: 100% !important;
 				}
 			`));
 			document.querySelector('head').appendChild(style);
@@ -93,7 +108,7 @@
 			};
 
 			setInterval(() => {
-				if(!window.location.href.endsWith('/#/instances')) return;
+				if(!window.location.hash.startsWith('#/instances')) return;
 
 				const 菜单 = document.querySelector(dom.菜单);
 				if(!菜单 || 菜单.textContent.startsWith('100')) return;
@@ -105,7 +120,7 @@
 					mouseClick(菜单);
 					mouseClick(document.querySelector(dom.选项100条));
 				}
-			}, 300);
+			}, 200);
 		}
 	})();
 </script>
