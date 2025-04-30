@@ -9,7 +9,7 @@
 			style.type = 'text/css';
 			style.rel = 'stylesheet';
 			style.appendChild(document.createTextNode(`
-				body:not(:has(.ant-modal-root > .ant-modal-mask[style=""])) {
+				body:not(:has(.ant-modal-root > .ant-modal-mask[style=""], .ant-modal-root > .ant-modal-mask:not([style="display: none;"]))) {
 					will-change: transform;
 					transform: translateZ(0);
 				}
