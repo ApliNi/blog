@@ -2,8 +2,15 @@
 	// 在应用实例页面添加扩展页面卡片, 上传本文件
 	(function() {
 
+		const config = {
+			'优化滚动卡顿': true,
+			'恢复每行 4 个卡片': true,
+			'隐藏卡片到期时间': true,
+			'自动展开 100 条每页': true,
+		};
+
 		// 优化滚动卡顿
-		if(true && !document.body.classList.contains('aplini_optimize_scroll')){
+		if(config['优化滚动卡顿'] && !document.body.classList.contains('aplini_optimize_scroll')){
 			document.body.classList.add('aplini_optimize_scroll');
 			const style = document.createElement('style');
 			style.type = 'text/css';
@@ -12,6 +19,10 @@
 				body:not(:has(.ant-modal-root > .ant-modal-mask[style=""], .ant-modal-root > .ant-modal-mask:not([style="display: none;"]))) {
 					will-change: transform;
 					transform: translateZ(0);
+				}
+				.ant-table-tbody tr,
+				.container .ant-row > .ant-col {
+					content-visibility: auto;
 				}
 				#app-mount-point .global-app-container .app-header-wrapper:has(> div.app-header-content) {
 					height: 60px;
@@ -23,8 +34,44 @@
 			document.querySelector('head').appendChild(style);
 		}
 
+		// 恢复每行 4 个卡片
+		if(config['恢复每行 4 个卡片'] && !document.body.classList.contains('aplini_card_4')){
+			document.body.classList.add('aplini_card_4');
+			const style = document.createElement('style');
+			style.type = 'text/css';
+			style.rel = 'stylesheet';
+			style.appendChild(document.createTextNode(`
+				@media (min-width: 1200px) {
+					.container > .ant-row > .ant-col:has(> .card-panel) {
+						flex: 0 0 25%;
+						max-width: 25%;
+					}
+				}
+			`));
+			document.querySelector('head').appendChild(style);
+		}
+
+		// 隐藏卡片到期时间
+		// 缩小最小高度
+		if(config['隐藏卡片到期时间'] && !document.body.classList.contains('aplini_hide_expired_time')){
+			document.body.classList.add('aplini_hide_expired_time');
+			const style = document.createElement('style');
+			style.type = 'text/css';
+			style.rel = 'stylesheet';
+			style.appendChild(document.createTextNode(`
+				.card-panel {
+					min-height: 154px !important;
+
+					.ant-typography > div:nth-child(3) {
+						display: none;
+					}
+				}
+			`));
+			document.querySelector('head').appendChild(style);
+		}
+
 		// 自动展开 100 条每页
-		if(true && !document.body.classList.contains('aplini_auto_expand')){
+		if(config['自动展开 100 条每页'] && !document.body.classList.contains('aplini_auto_expand')){
 			document.body.classList.add('aplini_auto_expand');
 			const mouseClick = (element, offsetX = 0, offsetY = 0) => {
 				const rect = element.getBoundingClientRect();
