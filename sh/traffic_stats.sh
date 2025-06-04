@@ -2,7 +2,7 @@
 
 # 配置部分
 INTERFACES="phy0-sta0 br-wan br-wan6"  # 要监控的网口列表
-STAT_FILE="./network_stats.log"  # 统计文件路径
+STAT_FILE="./traffic_stats.txt"  # 只保存最后一次的状态
 
 
 # 字节转换为易读格式函数
@@ -28,7 +28,6 @@ get_uptime() {
     cut -d' ' -f1 /proc/uptime | cut -d. -f1
 }
 
-# 获取当前时间戳
 uptime=$(get_uptime)
 datetime=$(date "+%Y-%m-%d %H:%M:%S")
 
@@ -43,42 +42,34 @@ iface_info=""
 for iface in $INTERFACES; do
     # 检查网口是否存在
     if [ -d "/sys/class/net/$iface" ]; then
-        # 读取RX和TX字节数
         rx_bytes=$(cat /sys/class/net/$iface/statistics/rx_bytes 2>/dev/null || echo 0)
         tx_bytes=$(cat /sys/class/net/$iface/statistics/tx_bytes 2>/dev/null || echo 0)
-        
-        # 保存各网口流量信息
+
         rx_formatted=$(format_bytes $rx_bytes)
         tx_formatted=$(format_bytes $tx_bytes)
         iface_info="$iface_info  - $iface: 下行: $rx_formatted ($rx_bytes), 上行: $tx_formatted ($tx_bytes)\n"
-        
-        # 累加到总流量
+
         total_rx=$((total_rx + rx_bytes))
         total_tx=$((total_tx + tx_bytes))
     fi
 done
 
-# 读取上一次的统计结果
+# 默认值
 last_rx=0
 last_tx=0
 last_uptime=0
 
+# 如果存在旧的状态文件，则读取
 if [ -f "$STAT_FILE" ]; then
-    # 读取最后一行有效数据
-    last_line=$(grep -E "^[0-9]+,[0-9]+,[0-9]+$" "$STAT_FILE" | tail -n 1)
-    if [ -n "$last_line" ]; then
-        last_uptime=$(echo "$last_line" | cut -d ',' -f 1)
-        last_rx=$(echo "$last_line" | cut -d ',' -f 2)
-        last_tx=$(echo "$last_line" | cut -d ',' -f 3)
-    fi
+    last_uptime=$(cut -d',' -f1 "$STAT_FILE" 2>/dev/null || echo 0)
+    last_rx=$(cut -d',' -f2 "$STAT_FILE" 2>/dev/null || echo 0)
+    last_tx=$(cut -d',' -f3 "$STAT_FILE" 2>/dev/null || echo 0)
 fi
 
-# 计算增量（基于系统运行时间差）
 delta_rx=$((total_rx - last_rx))
 delta_tx=$((total_tx - last_tx))
 time_diff=$((uptime - last_uptime))
 
-# 计算速率（字节/秒）
 rx_rate=0
 tx_rate=0
 if [ $time_diff -gt 0 ]; then
@@ -86,17 +77,11 @@ if [ $time_diff -gt 0 ]; then
     tx_rate=$((delta_tx / time_diff))
 fi
 
-# 如果统计文件不存在则创建并写入标题
-if [ ! -f "$STAT_FILE" ]; then
-    echo "# Uptime(sec),Total_RX(bytes),Total_TX(bytes)" > "$STAT_FILE"
-fi
-
-# 检查是否有变化才写入新数据
-if [ $delta_rx -ne 0 ] || [ $delta_tx -ne 0 ] || [ $last_uptime -eq 0 ]; then
-    echo "$uptime,$total_rx,$total_tx" >> "$STAT_FILE"
-fi
+# 覆盖写入新的状态（只保留最后一次）
+echo "$uptime,$total_rx,$total_tx" > "$STAT_FILE"
 
 
+# 输出结果
 echo ""
 echo "日期: ${datetime}, 时间: ${uptime}s, 间隔: ${time_diff}s"
 
