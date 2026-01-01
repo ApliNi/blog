@@ -4,11 +4,26 @@
 
 		const config = {
 			'优化滚动卡顿': true,
+			'始终隐藏错误卡片': true,
 			'恢复每行 4 个卡片': true,
 			'隐藏卡片部分文字': true,
 			'搜索框始终展开': true,
 			'自动展开 100 条每页': true,
 		};
+
+		// 始终隐藏错误卡片
+		if(config['优化滚动卡顿'] && !document.body.classList.contains('aplini_hide_error_card')){
+			document.body.classList.add('aplini_hide_error_card');
+			const style = document.createElement('style');
+			style.type = 'text/css';
+			style.rel = 'stylesheet';
+			style.appendChild(document.createTextNode(`
+				.console-wrapper > .error-card {
+					display: none !important;
+				}
+			`));
+			document.querySelector('head').appendChild(style);
+		}
 
 		// 优化滚动卡顿
 		if(config['优化滚动卡顿'] && !document.body.classList.contains('aplini_optimize_scroll')){
@@ -124,3 +139,4 @@
 		}
 	})();
 </script>
+
