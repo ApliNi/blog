@@ -32,19 +32,16 @@
 			style.type = 'text/css';
 			style.rel = 'stylesheet';
 			style.appendChild(document.createTextNode(`
-				body:not(:has(.ant-modal-root > .ant-modal-mask[style=""], .ant-modal-root > .ant-modal-mask:not([style="display: none;"]))) {
-					will-change: transform;
+				.ant-table-content > table tr {
+					content-visibility: auto;
+					will-change: transform, opacity;
 					transform: translateZ(0);
 				}
-				.ant-table-tbody tr,
-				.container .ant-row > .ant-col {
+
+				[data-card-type="InstanceList"] .container .ant-row > .ant-col:has(> .card-panel) {
 					content-visibility: auto;
-				}
-				#app-mount-point .global-app-container .app-header-wrapper:has(> div.app-header-content) {
-					height: 60px;
-					width: 100vw;
-					margin: -30px -99999px;
-					position: sticky;
+					will-change: transform, opacity;
+					transform: translateZ(0);
 				}
 			`));
 			document.querySelector('head').appendChild(style);
@@ -58,7 +55,7 @@
 			style.rel = 'stylesheet';
 			style.appendChild(document.createTextNode(`
 				@media (min-width: 1200px) {
-					[data-card-type="InstanceList"] .container > .ant-row > .ant-col:has(> .card-panel) {
+					[data-card-type="InstanceList"] .container .ant-row > .ant-col:has(> .card-panel) {
 						flex: 0 0 25%;
 						max-width: 25%;
 					}
