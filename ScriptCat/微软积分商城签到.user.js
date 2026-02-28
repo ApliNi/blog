@@ -37,6 +37,8 @@
 // 2026年2月28日
 // 修复: CODE获取到的不正常，没法用: https://scriptcat.org/zh-CN/script-show-page/1703/issue/1518
 // 授权码中的 code 部分发生改变, 需要修改匹配表达式, 改为 `.match(/(?<=code=)[^&]+/)`
+// 修改搜索间隔
+// 修改计划任务时间
 
 
 /* ==UserConfig==
@@ -50,11 +52,11 @@ Config:
         type: checkbox
         default: true
     span:
-        title: 搜索间隔（至少 30 秒即间隔 15-45 秒）
+        title: 搜索间隔 ±25秒
         type: number
-        default: 30
-        min: 30
-        unit: ±15秒
+        default: 60
+        min: 45
+        unit: ±25秒
     api:
         title: 搜索词接口（单机模式为随机汉字组合）
         type: select
@@ -1078,8 +1080,8 @@ return new Promise((resolve, reject) => {
         if (!result) {
             let timespan = FuckD.bing.time
             if (FuckD.search.index < FuckD.search.limit) {
-                const spanMIN = (FuckD.bing.span - 15) * 1000
-                const spanMAX = (FuckD.bing.span + 15) * 1000
+                const spanMIN = (FuckD.bing.span - 25) * 1000
+                const spanMAX = (FuckD.bing.span + 25) * 1000
                 timespan = FuckF.getScopeRandomNum(spanMIN, spanMAX)
             }
             FuckF.log("🔵", `第 ${FuckD.search.index}/${FuckD.search.limit} 次搜索完成\n(${FuckD.search.device})，等待 ${timespan / 1000} 秒后继续...`)
@@ -1090,7 +1092,6 @@ return new Promise((resolve, reject) => {
     }
 
     FuckF.tasksStart = async () => {
-        if (GM_info.script.author != "geoisam@qq.com") resolve()
         const host = "www.bing.com"
         if (!FuckD.bing.host) {
             if (FuckD.bing.status) {
