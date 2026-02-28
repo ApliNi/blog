@@ -35,10 +35,10 @@
 // https://login.live.com/oauth20_authorize.srf?client_id=0000000040170455&scope=service::prod.rewardsplatform.microsoft.com::MBI_SSL&response_type=code&redirect_uri=https://login.live.com/oauth20_desktop.srf
 
 // 2026年2月28日
-// 修复: CODE获取到的不正常，没法用: https://scriptcat.org/zh-CN/script-show-page/1703/issue/1518
-// 授权码中的 code 部分发生改变, 需要修改匹配表达式, 改为 `.match(/(?<=code=)[^&]+/)`
+// 修复: 授权码获取: https://scriptcat.org/zh-CN/script-show-page/1703/issue/1518 授权码中的 code 部分发生改变, 需要修改匹配表达式, 改为 `.match(/(?<=code=)[^&]+/)`
 // 修改搜索间隔
 // 修改计划任务时间
+// 更新 XHR 封装: https://scriptcat.org/zh-CN/script-show-page/1703/issue/1491
 
 
 /* ==UserConfig==
@@ -361,37 +361,47 @@ const FuckF = {
     },
 
     xhr(options, only = false) {
+        const self = this;
         return new Promise((resolve, reject) => {
-            const seconds = this.getTimestamp()
-            GM_xmlhttpRequest({
-                ...options,
-                timeout: 15000,
-                ontimeout() {
-                    reject(new Error(`请求超时！用时 ${(this.getTimestamp() - seconds) / 1000} 秒`))
-                },
-                onload(xhr) {
-                    if (xhr.status == 200) {
-                        if (only) {
-                            resolve(xhr.finalUrl)
-                        } else {
-                            resolve(xhr.responseText)
+            const start = self.getTimestamp();
+            try {
+                GM_xmlhttpRequest({
+                    ...options,
+                    timeout: 15000,
+
+                    ontimeout: () => {
+                        const cost = (self.getTimestamp() - start) / 1000
+                        reject(new Error(`请求超时！用时 ${cost} 秒`))
+                    },
+
+                    onload: (xhr) => {
+                        const cost = (self.getTimestamp() - start) / 1000
+
+                        if (xhr.status === 200) {
+                            resolve(only ? xhr.finalUrl : xhr.responseText)
+                            return
                         }
-                    } else {
+
                         const redirectStatuses = [301, 302, 307, 308]
                         if (redirectStatuses.includes(xhr.status)) {
-                            const result = xhr.responseHeaders
-                            const res = result.match(/Location:\s*(.*?)\s*\r?\n/i)
-                            resolve(res ? res[1] : false)
-                        } else {
-                            reject(new Error(`请求失败，用时 ${(this.getTimestamp() - seconds) / 1000} 秒，状态码：${xhr.status}`))
+                            const match = xhr.responseHeaders?.match(/Location:\s*(.*?)\s*\r?\n/i)
+                            resolve(match ? match[1] : false)
+                            return
                         }
-                    }
-                },
-                onerror(err) {
-                    reject(new Error(`请求发生异常！用时 ${(this.getTimestamp() - seconds) / 1000} 秒 🔛${err}`))
-                },
-            })
-        })
+
+                        reject(new Error(`请求失败，用时 ${cost} 秒，状态码：${xhr.status}`))
+                    },
+
+                    onerror: (err) => {
+                        const cost = (self.getTimestamp() - start) / 1000
+                        reject(new Error(`请求发生异常！用时 ${cost} 秒`))
+                    },
+                })
+            } catch (e) {
+                // 只能捕获 GM_xmlhttpRequest 同步异常
+                reject(e)
+            }
+        });
     },
 }
 
@@ -407,10 +417,12 @@ FuckF.getRandomSubstring = (str, min = 20, max = 32) => {
 FuckF.getRandomChinese = (min = 1, max = 10) => {
     const c = FuckD.chinese
     const l = FuckF.getScopeRandomNum(min, max)
-    return Array.from(
+    const text = Array.from(
         { length: l },
         () => c[FuckF.getRandomNum(c.length)],
-    ).join("")
+    ).join("");
+    FuckF.log("🔵", `随机搜索词: "${text}"`);
+    return text;
 }
 
 FuckF.getRandomApiHot = () => {
