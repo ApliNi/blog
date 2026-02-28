@@ -3,7 +3,7 @@
 // @namespace    https://geoisam.github.io
 // @version      3.6.10.1
 // @description  原版来自 https://github.com/geoisam/FuckScripts
-// @crontab      */29 * * * *
+// @crontab      */30 8-20 * * *
 // @connect      bing.com
 // @connect      login.live.com
 // @connect      rewards.bing.com
